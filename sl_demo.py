@@ -143,7 +143,7 @@ label_annotator = sv.LabelAnnotator(text_scale=0.5, text_padding=3, border_radiu
 trace_annotator = sv.TraceAnnotator(trace_length=180, color_lookup=sv.annotators.utils.ColorLookup.TRACK, position=sv.geometry.core.Position.CENTER, thickness=2)
 
 def callback(frame: np.ndarray, vid_fps: float) -> np.ndarray:
-    results = model(frame, imgsz=imgsz, conf=conf, iou=iou, stream=stream, stream_buffer=stream_buffer, verbose=verbose, half=half)
+    results = model(frame, imgsz=imgsz, conf=conf, iou=iou, stream=stream, stream_buffer=stream_buffer, verbose=verbose, half=half, device="mps")
     results = list(results)[0]
 
     detections = sv.Detections.from_ultralytics(results)
