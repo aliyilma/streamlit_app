@@ -1,5 +1,5 @@
-streamlit_antd_components
-streamlit_drawable_canvas
+streamlit-antd-components
+streamlit-drawable-canvas
 opencv-python
 pandas
 imutils
