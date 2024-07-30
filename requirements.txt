@@ -1,6 +1,6 @@
 streamlit_antd_components
 streamlit_drawable_canvas
-cv2
+opencv-python
 pandas
 imutils
 PIL
