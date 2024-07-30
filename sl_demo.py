@@ -16,7 +16,7 @@ from ultralytics import YOLO
 # Streamlit
 st.set_page_config(layout="wide")
 
-model_path = "y8s800full_v27.pt"
+model_path = "models/y8s800full_v27.mlpackage"
 video_path = None
 imgsz = 640 if "640" in model_path else 800
 urls = {"Gümüşsuyu": "https://hls.ibb.gov.tr/tkm1/hls/193.stream/chunklist.m3u8",
@@ -48,10 +48,24 @@ model = st.session_state.model  # Modeli yerel değişkene ata
 # Sidebar
 with st.sidebar:
     infer = st.toggle("Oynat Uğurcum", value=False)
+
+    source_type = sac.segmented(items=[sac.SegmentedItem(label='Dizin', icon="folder2-open"),
+                                       sac.SegmentedItem(label='URL', icon="link-45deg")], 
+                                       label='label', align='center', use_container_width=True, return_index=True)
     sac.divider(label='Seç bakalım', icon=sac.BsIcon('camera-video', size=20), align="center", color="red")
-    streams = [sac.SegmentedItem(label=key) for key in urls.keys()]
-    vid_choice = sac.segmented(items=streams, use_container_width=True, direction="vertical", divider=False)
-    video_path = urls[vid_choice]
+
+    if source_type == 0:
+        video_files = sorted(os.listdir("videos/"))[1:]
+        video_choices = {file: os.path.join("videos", file) for file in video_files}
+        vid_choice = sac.segmented(items=[sac.SegmentedItem(label=key) for key in video_choices.keys()], 
+                                   use_container_width=True, direction="vertical", divider=False, size="sm", align="start")
+        video_path = video_choices[vid_choice]
+    elif source_type == 1:
+        streams = [sac.SegmentedItem(label=key) for key in urls.keys()]
+        vid_choice = sac.segmented(items=streams, use_container_width=True, direction="vertical", divider=False)
+        video_path = urls[vid_choice]
+    else:
+        st.stop()
 
 # Video işleme
 cap = cv2.VideoCapture(video_path)
@@ -143,7 +157,7 @@ label_annotator = sv.LabelAnnotator(text_scale=0.5, text_padding=3, border_radiu
 trace_annotator = sv.TraceAnnotator(trace_length=180, color_lookup=sv.annotators.utils.ColorLookup.TRACK, position=sv.geometry.core.Position.CENTER, thickness=2)
 
 def callback(frame: np.ndarray, vid_fps: float) -> np.ndarray:
-    results = model(frame, imgsz=imgsz, conf=conf, iou=iou, stream=stream, stream_buffer=stream_buffer, verbose=verbose, half=half, device="mps")
+    results = model(frame, imgsz=imgsz, conf=conf, iou=iou, stream=stream, stream_buffer=stream_buffer, verbose=verbose, half=half)
     results = list(results)[0]
 
     detections = sv.Detections.from_ultralytics(results)
