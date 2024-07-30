@@ -1,0 +1,8 @@
+streamlit_antd_components
+streamlit_drawable_canvas
+cv2
+pandas
+imutils
+PIL
+supervision
+ultralytics
