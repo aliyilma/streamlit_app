@@ -16,7 +16,7 @@ from ultralytics import YOLO
 # Streamlit
 st.set_page_config(layout="wide")
 
-model_path = "models/y8s800full_v27.mlpackage"
+model_path = "y8s800full_v27.pt"
 video_path = None
 imgsz = 640 if "640" in model_path else 800
 urls = {"Gümüşsuyu": "https://hls.ibb.gov.tr/tkm1/hls/193.stream/chunklist.m3u8",
