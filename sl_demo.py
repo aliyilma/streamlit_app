@@ -48,17 +48,10 @@ model = st.session_state.model  # Modeli yerel değişkene ata
 # Sidebar
 with st.sidebar:
     infer = st.toggle("Oynat Uğurcum", value=False)
-
-    source_type = sac.segmented(items=[sac.SegmentedItem(label='URL', icon="link-45deg")], 
-                                       label='label', align='center', use_container_width=True, return_index=True)
     sac.divider(label='Seç bakalım', icon=sac.BsIcon('camera-video', size=20), align="center", color="red")
-
-    if source_type == 1:
-        streams = [sac.SegmentedItem(label=key) for key in urls.keys()]
-        vid_choice = sac.segmented(items=streams, use_container_width=True, direction="vertical", divider=False)
-        video_path = urls[vid_choice]
-    else:
-        st.stop()
+    streams = [sac.SegmentedItem(label=key) for key in urls.keys()]
+    vid_choice = sac.segmented(items=streams, use_container_width=True, direction="vertical", divider=False)
+    video_path = urls[vid_choice]
 
 # Video işleme
 cap = cv2.VideoCapture(video_path)
